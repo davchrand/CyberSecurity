@@ -9,9 +9,12 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include "encryptionGenerator.h"
 
 int main(int argc, char* argv[])
 {
+        bool generatorHolder;
+        generatorHolder = generator::generate_key();
 	std::string fileName = "";
 
 	// Command Line Arguments are 2: ./a.out <insert string here>
