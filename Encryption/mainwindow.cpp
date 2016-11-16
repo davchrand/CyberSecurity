@@ -162,7 +162,7 @@ void MainWindow::on_pushButton_clicked()
 
     ui->detailsBox->append("Encryption Process finished!");
     delay(1);
-    ui->detailsBox->append("*** Printing out Encrypted Message ***");
+    ui->detailsBox->append("*** Printing out Encrypted Message ***\n");
     delay(1);
     ui->detailsBox->append(encrypt);
     ui->textEdit->setText(encrypt);
