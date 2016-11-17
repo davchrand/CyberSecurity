@@ -19,6 +19,10 @@ private slots:
     void on_pushButton_clicked();
     void on_actionExit_triggered();
 
+    void on_fileDialog_clicked();
+
+    void on_generateKeys_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

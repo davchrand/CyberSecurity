@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.7.0
+** Created by: Qt User Interface Compiler version 5.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -32,11 +32,11 @@ public:
     QAction *actionExit;
     QWidget *centralWidget;
     QLabel *label;
-    QTextEdit *textEdit;
-    QPushButton *pushButton;
-    QPushButton *pushButton_2;
+    QTextEdit *decryptText;
+    QPushButton *chooseFile;
+    QPushButton *decryptButton;
     QLabel *label_2;
-    QTextEdit *textEdit_2;
+    QTextEdit *detailsBox;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QToolBar *mainToolBar;
@@ -46,39 +46,42 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(751, 752);
+        MainWindow->resize(751, 761);
         actionExit = new QAction(MainWindow);
         actionExit->setObjectName(QStringLiteral("actionExit"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         label = new QLabel(centralWidget);
         label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(190, 0, 221, 31));
+        label->setGeometry(QRect(130, 0, 281, 31));
         QFont font;
         font.setPointSize(12);
         label->setFont(font);
-        textEdit = new QTextEdit(centralWidget);
-        textEdit->setObjectName(QStringLiteral("textEdit"));
-        textEdit->setGeometry(QRect(10, 40, 731, 391));
-        pushButton = new QPushButton(centralWidget);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setGeometry(QRect(410, 0, 111, 31));
-        pushButton->setFont(font);
-        pushButton_2 = new QPushButton(centralWidget);
-        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
-        pushButton_2->setGeometry(QRect(10, 440, 731, 31));
-        pushButton_2->setFont(font);
+        decryptText = new QTextEdit(centralWidget);
+        decryptText->setObjectName(QStringLiteral("decryptText"));
+        decryptText->setGeometry(QRect(10, 40, 731, 391));
+        chooseFile = new QPushButton(centralWidget);
+        chooseFile->setObjectName(QStringLiteral("chooseFile"));
+        chooseFile->setGeometry(QRect(410, 0, 141, 31));
+        chooseFile->setFont(font);
+        decryptButton = new QPushButton(centralWidget);
+        decryptButton->setObjectName(QStringLiteral("decryptButton"));
+        decryptButton->setGeometry(QRect(10, 440, 731, 31));
+        decryptButton->setFont(font);
         label_2 = new QLabel(centralWidget);
         label_2->setObjectName(QStringLiteral("label_2"));
         label_2->setGeometry(QRect(10, 480, 61, 21));
         label_2->setFont(font);
-        textEdit_2 = new QTextEdit(centralWidget);
-        textEdit_2->setObjectName(QStringLiteral("textEdit_2"));
-        textEdit_2->setGeometry(QRect(10, 510, 731, 181));
+        detailsBox = new QTextEdit(centralWidget);
+        detailsBox->setObjectName(QStringLiteral("detailsBox"));
+        detailsBox->setGeometry(QRect(10, 510, 731, 181));
+        QFont font1;
+        font1.setPointSize(10);
+        detailsBox->setFont(font1);
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 751, 21));
+        menuBar->setGeometry(QRect(0, 0, 751, 26));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         MainWindow->setMenuBar(menuBar);
@@ -102,8 +105,8 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
         actionExit->setText(QApplication::translate("MainWindow", "Exit", 0));
         label->setText(QApplication::translate("MainWindow", "Text to be Decrypted below or", 0));
-        pushButton->setText(QApplication::translate("MainWindow", "Text from File", 0));
-        pushButton_2->setText(QApplication::translate("MainWindow", "Decrypt", 0));
+        chooseFile->setText(QApplication::translate("MainWindow", "Text from File", 0));
+        decryptButton->setText(QApplication::translate("MainWindow", "Decrypt", 0));
         label_2->setText(QApplication::translate("MainWindow", "Details:", 0));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0));
     } // retranslateUi

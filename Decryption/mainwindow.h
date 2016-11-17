@@ -16,7 +16,10 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButton_2_clicked();
+    void on_decryptButton_clicked();
+    void on_actionExit_triggered();
+
+    void on_chooseFile_clicked();
 
 private:
     Ui::MainWindow *ui;

@@ -7,8 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>700</width>
-    <height>780</height>
+    <height>829</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>12</pointsize>
+   </font>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
@@ -17,9 +22,9 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>160</x>
       <y>0</y>
-      <width>221</width>
+      <width>281</width>
       <height>31</height>
      </rect>
     </property>
@@ -32,7 +37,7 @@
      <string>Text to be encrypted below or</string>
     </property>
    </widget>
-   <widget class="QTextEdit" name="textEdit">
+   <widget class="QTextEdit" name="encryptText">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -46,7 +51,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>450</y>
+      <y>460</y>
       <width>681</width>
       <height>31</height>
      </rect>
@@ -64,9 +69,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>490</y>
+      <y>500</y>
       <width>71</width>
-      <height>16</height>
+      <height>20</height>
      </rect>
     </property>
     <property name="font">
@@ -82,16 +87,21 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>510</y>
+      <y>520</y>
       <width>681</width>
-      <height>211</height>
+      <height>221</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="fileDialog">
     <property name="geometry">
      <rect>
-      <x>390</x>
+      <x>440</x>
       <y>0</y>
       <width>141</width>
       <height>31</height>
@@ -103,7 +113,20 @@
      </font>
     </property>
     <property name="text">
-     <string>Text from File</string>
+     <string>Choose File</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="generateKeys">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>0</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Generate Keys</string>
     </property>
    </widget>
   </widget>
@@ -113,7 +136,7 @@
      <x>0</x>
      <y>0</y>
      <width>700</width>
-     <height>21</height>
+     <height>34</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

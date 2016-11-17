@@ -32,10 +32,12 @@ public:
     QAction *actionExit;
     QWidget *centralWidget;
     QLabel *label;
-    QTextEdit *textEdit;
+    QTextEdit *encryptText;
     QPushButton *pushButton;
     QLabel *label_2;
     QTextEdit *detailsBox;
+    QPushButton *fileDialog;
+    QPushButton *generateKeys;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QToolBar *mainToolBar;
@@ -45,35 +47,46 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1164, 619);
+        MainWindow->resize(700, 829);
+        QFont font;
+        font.setPointSize(12);
+        MainWindow->setFont(font);
         actionExit = new QAction(MainWindow);
         actionExit->setObjectName(QStringLiteral("actionExit"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         label = new QLabel(centralWidget);
         label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(10, 0, 251, 31));
-        QFont font;
-        font.setPointSize(12);
+        label->setGeometry(QRect(160, 0, 281, 31));
         label->setFont(font);
-        textEdit = new QTextEdit(centralWidget);
-        textEdit->setObjectName(QStringLiteral("textEdit"));
-        textEdit->setGeometry(QRect(10, 40, 561, 471));
+        encryptText = new QTextEdit(centralWidget);
+        encryptText->setObjectName(QStringLiteral("encryptText"));
+        encryptText->setGeometry(QRect(10, 40, 681, 411));
         pushButton = new QPushButton(centralWidget);
         pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setGeometry(QRect(10, 520, 561, 31));
+        pushButton->setGeometry(QRect(10, 460, 681, 31));
         pushButton->setFont(font);
         label_2 = new QLabel(centralWidget);
         label_2->setObjectName(QStringLiteral("label_2"));
-        label_2->setGeometry(QRect(830, 10, 71, 16));
+        label_2->setGeometry(QRect(10, 500, 71, 20));
         label_2->setFont(font);
         detailsBox = new QTextEdit(centralWidget);
         detailsBox->setObjectName(QStringLiteral("detailsBox"));
-        detailsBox->setGeometry(QRect(590, 40, 561, 511));
+        detailsBox->setGeometry(QRect(10, 520, 681, 221));
+        QFont font1;
+        font1.setPointSize(10);
+        detailsBox->setFont(font1);
+        fileDialog = new QPushButton(centralWidget);
+        fileDialog->setObjectName(QStringLiteral("fileDialog"));
+        fileDialog->setGeometry(QRect(440, 0, 141, 31));
+        fileDialog->setFont(font);
+        generateKeys = new QPushButton(centralWidget);
+        generateKeys->setObjectName(QStringLiteral("generateKeys"));
+        generateKeys->setGeometry(QRect(10, 0, 141, 31));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1164, 26));
+        menuBar->setGeometry(QRect(0, 0, 700, 34));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         MainWindow->setMenuBar(menuBar);
@@ -96,9 +109,11 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
         actionExit->setText(QApplication::translate("MainWindow", "Exit", 0));
-        label->setText(QApplication::translate("MainWindow", "Text to be encrypted below:", 0));
+        label->setText(QApplication::translate("MainWindow", "Text to be encrypted below or", 0));
         pushButton->setText(QApplication::translate("MainWindow", "Encrypt", 0));
         label_2->setText(QApplication::translate("MainWindow", "Details:", 0));
+        fileDialog->setText(QApplication::translate("MainWindow", "Choose File", 0));
+        generateKeys->setText(QApplication::translate("MainWindow", "Generate Keys", 0));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0));
     } // retranslateUi
 
