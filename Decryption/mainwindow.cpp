@@ -31,6 +31,12 @@ void delay(int secs)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 }
 
+bool fileExists(QString path) {
+    QFileInfo check_file(path);
+    // check if file exists and if yes: Is it really a file and no directory?
+    return (check_file.exists() && check_file.isFile());
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -52,43 +58,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-// generate and save private key at private.pem
-void savePrivateKey(char *keypair){
-  FILE* pFile;
-
-  if (pFile = fopen("private.pem", "wb"))
-  {
-    fprintf(pFile, "%s", keypair);
-  }
-  else{
-    printf("PEM_write_PrivateKey failed.\n");
-  }
-
-  if (pFile)
-  {
-    fclose(pFile);
-    pFile = NULL;
-  }
-}
- // generate and save public key at public.pem
-void savePublicKey(char *keypair){
-  FILE* pFile;
-
-  if (pFile = fopen("public.pem", "wb"))
-  {
-    fprintf(pFile, "%s", keypair);
-  }
-  else{
-    printf("PEM_write_PublicKey failed.\n");
-  }
-
-  if (pFile)
-  {
-    fclose(pFile);
-    pFile = NULL;
-  }
-}
-
 void MainWindow::on_actionExit_triggered()
 {
     QApplication::quit();
@@ -96,86 +65,91 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_decryptButton_clicked()
 {
-    QString text = ui->decryptText->toPlainText();
-    std::string str = text.toStdString();
-    char *encrypted = new char[str.length() + 1];
-    strcpy(encrypted, str.c_str());
-
     char *decrypt = NULL;		// Decrypted message
     char *err = NULL;			// Buffer for any error messages
+    RSA *priKey = NULL;
+    bool doDecrypt;
 
     OpenSSL_add_all_algorithms();
 
-    QString privateKey = "";
-    QString filename = "private.pem";
-    QFile file(filename);
-    if(file.open(QIODevice::ReadOnly)) {
-        QTextStream stream(&file);
-        privateKey = stream.readAll();
+    if(ui->fileNameBox->text().length() == 0)
+        doDecrypt = false;
+    else {
+        if(fileExists(ui->fileNameBox->text()))
+            doDecrypt = true;
+        else
+            QMessageBox::information(0, "FILE DOESN'T EXIST!", "Please re-enter a valid file!");
     }
 
-    std::string key = privateKey.toStdString();
-    char *pKey = new char[key.length() + 1];
-    strcpy(pKey, key.c_str());
-
-    RSA *priKey = NULL;
-    BIO *keybio;
-    keybio = BIO_new_mem_buf(pKey, -1);
-    if (keybio==NULL)
+    if(fileExists("private.pem") && doDecrypt)
     {
-        printf( "Failed to create key BIO");
-        QApplication::quit();
+        BIO *priBio;
+
+        QString privateKey = "";
+        std::string key = "";
+
+        QString priFileName = "private.pem";
+
+        QFile priFile(priFileName);
+        if(priFile.open(QIODevice::ReadOnly)) {
+            QTextStream stream(&priFile);
+            privateKey = stream.readAll();
+        }
+
+        key = privateKey.toStdString();
+        char *prKey = new char[key.length() + 1];
+        strcpy(prKey, key.c_str());
+
+        priBio = BIO_new_mem_buf(prKey, -1);
+        if (priBio==NULL)
+        {
+            printf( "Failed to create key BIO");
+            QApplication::quit();
+        }
+        priKey = PEM_read_bio_RSAPrivateKey(priBio, &priKey,NULL, NULL);
+        if(priKey == NULL)
+        {
+            printf( "Failed to create RSA");
+        }
+
+        ui->detailsBox->append("*** Starting Decryption of Text ***\n");
+        delay(1);
+
+        ui->detailsBox->append("Setting up decryption...\n");
+        delay(1);
+
+        err = (char*)malloc(130);
+
+        std::ifstream in(ui->fileNameBox->text().toStdString());
+        std::string contents((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
+
+        ui->detailsBox->append("Executing Decryption...\n");
+        delay(1);
+
+        // Decrypt the message
+        int encrypt_len = strlen(contents.c_str());
+        decrypt = (char *)malloc(encrypt_len);
+        if (RSA_private_decrypt(encrypt_len, (unsigned char*)contents.c_str(), (unsigned char*)decrypt, priKey, RSA_PKCS1_OAEP_PADDING) == -1) {
+            ERR_load_crypto_strings();
+            ERR_error_string(ERR_get_error(), err);
+            fprintf(stderr, "Error decrypting message: %s\n", err);
+        }
+
+        ui->detailsBox->append("Decryption Process finished!\n");
+        ui->detailsBox->append("*** Printing out Decrypted Message ***\n");
+        delay(1);
+        ui->detailsBox->append(decrypt);
+
     }
-    priKey = PEM_read_bio_RSAPrivateKey(keybio, &priKey,NULL, NULL);
-    if(priKey == NULL)
+    else
     {
-        printf( "Failed to create RSA");
+        QMessageBox::information(0, "KEY FILE DOES EXIST!", "Please make sure private.pem is in your directory!");
     }
 
-    ui->detailsBox->append("*** Starting Decryption of Text ***");
-    delay(2);
-
-    ui->detailsBox->append("Setting up decryption...");
-    delay(2);
-
-    ui->detailsBox->append("Executing Decryption...");
-    delay(2);
-
-    err = (char*)malloc(130);
-
-    // Decrypt the message
-    int encrypt_len = strlen(encrypted);
-    decrypt = (char *)malloc(encrypt_len);
-    if (RSA_private_decrypt(256, (unsigned char*)encrypted, (unsigned char*)decrypt, priKey, RSA_PKCS1_OAEP_PADDING) == -1) {
-        ERR_load_crypto_strings();
-        ERR_error_string(ERR_get_error(), err);
-        fprintf(stderr, "Error decrypting message: %s\n", err);
-    }
-
-    ui->detailsBox->append("Decryption Process finished!");
-    delay(1);
-    ui->detailsBox->append("*** Printing out Decrypted Message ***\n");
-    delay(1);
-    QString string(decrypt);
-    ui->detailsBox->append(string);
-
-    delete [] encrypted;
-    delete [] pKey;
 }
 
-void MainWindow::on_chooseFile_clicked()
+
+void MainWindow::on_pushButton_clicked()
 {
-    QString filename=QFileDialog::getOpenFileName(
-                this,
-                tr("Open File"),
-                "C://",
-                "All Files (*.*);;Text File (*.txt)"
-                );
-    QFile file(filename);
-    if(!file.open(QIODevice::ReadOnly))
-        QMessageBox::information(0, "File Information", file.errorString());
-
-    QTextStream in(&file);
-
-    ui->decryptText->setText(in.readAll());
+    ui->detailsBox->clear();
 }

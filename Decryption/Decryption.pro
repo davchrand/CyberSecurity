@@ -24,3 +24,5 @@ FORMS    += mainwindow.ui
 INCLUDEPATH += C:\OpenSSL-Win64\include
 
 LIBS+= -LC:/OpenSSL-Win64/lib -llibcrypto -llibssl
+
+CONFIG += static

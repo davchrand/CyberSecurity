@@ -116,9 +116,6 @@ void MainWindow::on_pushButton_clicked()
     RSA *priKey = NULL;
     RSA *pubKey = NULL;
 
-    //memcpy(msg, text.toStdString().c_str(), text.size());
-    //msg[strlen(msg) + 1] = '\0';
-
     OpenSSL_add_all_algorithms();
 
     if(fileExists("public.pem") && fileExists("private.pem"))
@@ -179,17 +176,16 @@ void MainWindow::on_pushButton_clicked()
             printf( "Failed to create RSA");
         }
 
-        ui->detailsBox->append("*** Starting Encryption of Text ***");
+        ui->detailsBox->append("*** Starting Encryption of Text ***\n");
         delay(1);
 
-        ui->detailsBox->append("Setting up encryption...");
-        delay(2);
+        ui->detailsBox->append("Setting up encryption...\n");
         encrypt = (char *)malloc(RSA_size(pubKey));
         int encrypt_len;
         err = (char*)malloc(130);
 
-        ui->detailsBox->append("Executing encryption...");
-        delay(2);
+        ui->detailsBox->append("Executing encryption...\n");
+        delay(1);
         if ((encrypt_len = RSA_public_encrypt((int)strlen(msg) + 1, (unsigned char*)msg, (unsigned char*)encrypt, pubKey, RSA_PKCS1_OAEP_PADDING)) == -1)
         {
               ERR_load_crypto_strings();
@@ -198,29 +194,33 @@ void MainWindow::on_pushButton_clicked()
 
         }
 
-        ui->detailsBox->append("Encryption Process finished!");
+        ui->detailsBox->append("Encryption Process finished!\n");
         delay(1);
         ui->detailsBox->append("*** Printing out Encrypted Message ***\n");
         delay(1);
         ui->detailsBox->append(encrypt);
 
-        // Write encrypted text to file named encrypted.txt
-        QString filename = "encrypted.txt";
-        QFile file(filename);
-        if(file.open(QIODevice::ReadWrite)) {
-            QTextStream stream(&file);
-            stream << encrypt;
+        QFile outFile("encrypted.txt");
+        if(outFile.open(QIODevice::WriteOnly)) {
+            qint64 bytesWritten = outFile.write(reinterpret_cast<const char*>(encrypt), encrypt_len);
+            if(bytesWritten < encrypt_len) {
+                ui->detailsBox->append("File Write Failed!");
+            }
         }
+        outFile.close();
+
+        std::ifstream in("encrypted.txt");
+        std::string contents((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
 
         // Decrypt the message
         decrypt = (char *)malloc(encrypt_len);
-        if (RSA_private_decrypt(encrypt_len, (unsigned char*)encrypt, (unsigned char*)decrypt, priKey, RSA_PKCS1_OAEP_PADDING) == -1) {
+        if (RSA_private_decrypt(encrypt_len, (unsigned char*)contents.c_str(), (unsigned char*)decrypt, priKey, RSA_PKCS1_OAEP_PADDING) == -1) {
             ERR_load_crypto_strings();
             ERR_error_string(ERR_get_error(), err);
             fprintf(stderr, "Error decrypting message: %s\n", err);
         }
 
-        ui->detailsBox->append("\nPrinting out Decrypted Message:\n");
+        ui->detailsBox->append("\nPrinting out Original Message:\n");
         delay(1);
         ui->detailsBox->append(decrypt);
         ui->detailsBox->append("\n");
@@ -284,8 +284,17 @@ void MainWindow::on_generateKeys_clicked()
     savePrivateKey(pri_key);
     savePublicKey(pub_key);
 
-    //PEM_read_bio_RSAPublicKey(pub, &pubKey, NULL, NULL);
-    //PEM_read_bio_RSAPrivateKey(pri, &priKey, NULL, NULL);
-
     generated = true;
+
+    QMessageBox::information(0, "Keys Generated", "Your keys have been generated successfully!");
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    ui->detailsBox->clear();
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    ui->encryptText->clear();
 }
